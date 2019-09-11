@@ -76,12 +76,14 @@ class DBStorage:
         self.__session.remove()
 
     def get(self, cls, id):
+        """ get a particular instance with the name <cls> and the id <id> """
         key = cls + "." + id
         object_dict = self.all(cls)
         retrieved_object = object_dict.get(key)
         return (retrieved_object)
 
     def count(self, cls=None):
+        """ count the number of classes specified by <cls> """
         object_dict = self.all(cls)
         count = 0
         for item in object_dict.items():
