@@ -125,5 +125,24 @@ class TestFileStorage(unittest.TestCase):
             ids.append(instance.id)
             instance.save()
         for index, tpl in enumerate(classes.items()):
-            obj = models.storage.get(tpl[0], id[index])
-            self.assertls(obj, instances[index])
+            obj = models.storage.get(tpl[0], ids[index])
+            self.assertIs(obj, instances[index])
+
+    @unittest.skipIf(models.storage_t == 'db', "not testing file storage")
+    def test_count(self):
+        """ test get function """
+        storage = FileStorage()
+        storage._FileStorage__objects = {}
+        ids = []
+        instances = []
+        for key, value in classes.items():
+            instance = value()
+            instances.append(instance)
+            ids.append(instance.id)
+            storage.new(instance)
+        instance = classes["Amenity"]()
+        instances.append(instance)
+        ids.append(instance.id)
+        storage.new(instance)
+        self.assertEqual(storage.count("Amenity"), 2)
+        self.assertEqual(storage.count("City"), 1)
