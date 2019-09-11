@@ -156,7 +156,7 @@ No known bugs at this time.
 ## Authors
 Alexa Orrico - [Github](https://github.com/alexaorrico) / [Twitter](https://twitter.com/alexa_orrico)  
 Jennifer Huang - [Github](https://github.com/jhuang10123) / [Twitter](https://twitter.com/earthtojhuang)\
-Joann Vuong - <130@holbertonschool.com> 
+Joann Vuong - <130@holbertonschool.com>
 Haroldo Velez - <783@holbertonschool.com>
 Kenneth Cortes - <739@holbertonschool.com>
 
