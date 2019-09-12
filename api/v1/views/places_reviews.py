@@ -57,7 +57,7 @@ def create_review(place_id):
             if text is not None:
                 obj = models.storage.get("User", user_id)
                 if obj is not None:
-                    obj = Review(place_id=place_id, text=text)
+                    obj = Review(place_id=place_id, user_id = user_id, text=text)
                     obj.save()
                     return jsonify(obj.to_dict()), 201
                 else:
