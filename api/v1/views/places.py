@@ -101,19 +101,17 @@ def search_places():
     list_json = [len(val) for val in json.values()]
     if not any(list_json) == True:
         return jsonify(list_places)
+    list_places = []
     if json.get("states") is not None:
         if len(json.get("states")) != 0:
-            list_places = []
             for i in json.get("states"):
                 obj = models.storage.get("State", i)
                 if obj is not None:
                     for city in obj.cities:
                         for place in city.places:
                             list_places.append(place.to_dict())
-            return jsonify(list_places)
     if json.get("cities") is not None:
         if len(json.get("cities")) != 0:
-            list_places = []
             for i in json.get("cities"):
                 obj = models.storage.get("City", i)
                 if obj is not None:
