@@ -44,7 +44,7 @@ def create_place(city_id):
 
 
 @app_views.route("/places/<place_id>", methods=["GET"], strict_slashes=False)
-def placeId(state_id):
+def placeId(place_id):
     """Returns the place with an id"""
     obj = models.storage.get("Place", place_id)
     if obj is not None:
@@ -55,7 +55,7 @@ def placeId(state_id):
 
 @app_views.route("/places/<place_id>", methods=["DELETE"],
                  strict_slashes=False)
-def place_del(state_id):
+def place_del(place_id):
     """ return empty dict with 200 status"""
     obj = models.storage.get("Place", place_id)
     if obj is not None:
@@ -67,7 +67,7 @@ def place_del(state_id):
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"], strict_slashes=False)
-def update_place(state_id):
+def update_place(place_id):
     """Returns the place with an id"""
     obj = models.storage.get("Place", place_id)
     json = request.get_json()
