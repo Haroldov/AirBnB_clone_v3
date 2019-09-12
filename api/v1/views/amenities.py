@@ -30,7 +30,8 @@ def create_amenity():
         abort(400, "Not a JSON")
 
 
-@app_views.route("/amenities/<amenity_id>", methods=["GET"], strict_slashes=False)
+@app_views.route("/amenities/<amenity_id>",
+                 methods=["GET"], strict_slashes=False)
 def amenityId(amenity_id):
     """Returns the amenity with an id"""
     obj = models.storage.get("Amenity", amenity_id)
@@ -53,7 +54,8 @@ def amenity_del(amenity_id):
         abort(404)
 
 
-@app_views.route("/amenities/<amenity_id>", methods=["PUT"], strict_slashes=False)
+@app_views.route("/amenities/<amenity_id>",
+                 methods=["PUT"], strict_slashes=False)
 def update_amenity(amenity_id):
     """Returns the amenity with an id"""
     obj = models.storage.get("Amenity", amenity_id)
