@@ -31,8 +31,8 @@ def create_city(state_id):
 def citiesId(state_id):
     """Returns the city with an id"""
     obj = models.storage.get("State", state_id)
-    all_cities = models.storage.all("City")
-    new_dict = [val.to_dict() for val in all_cities.values()]
+    all_cities = obj.cities
+    new_dict = [val.to_dict() for val in all_cities]
     if obj is not None:
         return jsonify(new_dict)
     else:
@@ -70,7 +70,8 @@ def update_city(city_id):
     if obj is not None:
         if json is not None:
             for key, value in json.items():
-                if key not in ["id", "updated_at", "created_at"]:
+                if key not in ["id", "updated_at", "created_at",
+                               "state_id"]:
                     setattr(obj, key, value)
             obj.save()
             return jsonify(obj.to_dict())

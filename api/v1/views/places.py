@@ -14,15 +14,6 @@ def all_pofc(city_id):
     new_dict = [val.to_dict() for val in obj.places]
     return jsonify(new_dict)
 
-
-@app_views.route("/places", methods=["GET"], strict_slashes=False)
-def all_places():
-    """Returns all the places"""
-    all_place = models.storage.all("Place")
-    new_dict = [val.to_dict() for val in all_place.values()]
-    return jsonify(new_dict)
-
-
 @app_views.route("/cities/<city_id>/places", methods=["POST"], strict_slashes=False)
 def create_place(city_id):
     """Creates place"""
@@ -30,10 +21,11 @@ def create_place(city_id):
     if obj_city is None:
         abort(404)
     json = request.get_json()
-    Place = models.place.State
+    Place = models.place.Place
     if json is not None:
         if json.get("user_id") is not None:
-            obj_user = models.storage.get("User", user_id)
+            obj_user = models.storage.get("User",
+                                          json.get("user_id"))
             if obj_user is None:
                 abort(404)
             if json.get("name") is not None:
@@ -52,7 +44,7 @@ def create_place(city_id):
 
 
 @app_views.route("/places/<place_id>", methods=["GET"], strict_slashes=False)
-def placeId(state_id):
+def placeId(place_id):
     """Returns the place with an id"""
     obj = models.storage.get("Place", place_id)
     if obj is not None:
@@ -63,7 +55,7 @@ def placeId(state_id):
 
 @app_views.route("/places/<place_id>", methods=["DELETE"],
                  strict_slashes=False)
-def place_del(state_id):
+def place_del(place_id):
     """ return empty dict with 200 status"""
     obj = models.storage.get("Place", place_id)
     if obj is not None:
@@ -75,7 +67,7 @@ def place_del(state_id):
 
 
 @app_views.route("/places/<place_id>", methods=["PUT"], strict_slashes=False)
-def update_place(state_id):
+def update_place(place_id):
     """Returns the place with an id"""
     obj = models.storage.get("Place", place_id)
     json = request.get_json()
