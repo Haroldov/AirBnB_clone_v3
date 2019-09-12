@@ -106,15 +106,26 @@ def search_places():
             list_places = []
             for i in json.get("states"):
                 obj = models.storage.get("State", i)
-                for city in obj.cities:
-                    for place in city.places:
-                        list_places.append(place.to_dict())
+                if obj is not None:
+                    for city in obj.cities:
+                        for place in city.places:
+                            list_places.append(place.to_dict())
             return jsonify(list_places)
     if json.get("cities") is not None:
         if len(json.get("cities")) != 0:
             list_places = []
             for i in json.get("cities"):
                 obj = models.storage.get("City", i)
-                for place in city.places:
-                    list_places.append(place.to_dict())
+                if obj is not None:
+                    for place in obj.places:
+                        list_places.append(place.to_dict())
+            return jsonify(list_places)
+    if json.get("amenities") is not None:
+        if len(json.get("amenites")) != 0:
+            list_places = []
+            for i in json.get("amenities"):
+                obj = models.storage.get("Amenity", i)
+                if obj is not None:
+                    for place in obj.place_amenities:
+                        list_places.append(place.to_dict())
             return jsonify(list_places)
