@@ -5,7 +5,9 @@ from api.v1.views import app_views
 from flask import jsonify, abort, request
 import models
 
-@app_views.route("/cities/<city_id>/places", methods=["GET"], strict_slashes=False)
+
+@app_views.route("/cities/<city_id>/places",
+                 methods=["GET"], strict_slashes=False)
 def all_pofc(city_id):
     """Returns all Place objects of a City"""
     obj = models.storage.get("City", city_id)
@@ -14,7 +16,9 @@ def all_pofc(city_id):
     new_dict = [val.to_dict() for val in obj.places]
     return jsonify(new_dict)
 
-@app_views.route("/cities/<city_id>/places", methods=["POST"], strict_slashes=False)
+
+@app_views.route("/cities/<city_id>/places",
+                 methods=["POST"], strict_slashes=False)
 def create_place(city_id):
     """Creates place"""
     obj_city = models.storage.get("City", city_id)
@@ -31,8 +35,7 @@ def create_place(city_id):
             if json.get("name") is not None:
                 obj = Place(name=json.get("name"),
                             user_id=json.get("user_id"),
-                            city_id=city_id,
-                )
+                            city_id=city_id)
                 obj.save()
                 return jsonify(obj.to_dict()), 201
             else:
