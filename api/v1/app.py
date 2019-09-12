@@ -2,13 +2,19 @@
 """
 Module for api
 """
-from flask import Flask
+from flask import Flask, jsonify
 import models
 from api.v1.views import app_views
 from os import getenv
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
+
+
+@app.errorhandler(404)
+def error_404(e):
+    """Returns the status 404"""
+    return jsonify({"error": "Not found"})
 
 
 @app.teardown_appcontext
