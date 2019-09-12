@@ -111,6 +111,8 @@ def search_places():
                     for city in obj.cities:
                         for place in city.places:
                             list_places.append(place.to_dict())
+            return jsonify(list_places)
+    list_places = []
     if json.get("cities") is not None:
         if len(json.get("cities")) != 0:
             for i in json.get("cities"):
