@@ -85,6 +85,7 @@ class TestFileStorage(unittest.TestCase):
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_save(self):
+
         """Test that save properly saves objects to db_storage"""
 
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
@@ -98,3 +99,19 @@ class TestFileStorage(unittest.TestCase):
     @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
         """Test that count properly counts objects from db_storage"""
+        ids = []
+        instances = []
+        instance = Amenity(name="Wifi")
+        instances.append(instance)
+        ids.append(instance.id)
+        instance.save()
+        instance = classes["Amenity"](name="tv")
+        instances.append(instance)
+        ids.append(instance.id)
+        instance.save()
+        instance = User(email="x@y.com", password="hello")
+        instances.append(instance)
+        ids.append(instance.id)
+        instance.save()
+        self.assertEqual(models.storage.count("Amenity"), 2)
+        self.assertEqual(models.storage.count("User"), 1)
