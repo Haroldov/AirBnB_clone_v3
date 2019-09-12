@@ -24,7 +24,8 @@ def create_place(city_id):
     Place = models.place.Place
     if json is not None:
         if json.get("user_id") is not None:
-            obj_user = models.storage.get("User", user_id)
+            obj_user = models.storage.get("User",
+                                          json.get("user_id"))
             if obj_user is None:
                 abort(404)
             if json.get("name") is not None:
