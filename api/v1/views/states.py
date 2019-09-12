@@ -2,7 +2,7 @@
 """ module for states query """
 
 from api.v1.views import app_views
-from flask import jsonify
+from flask import jsonify, abort
 import models
 
 
@@ -13,10 +13,11 @@ def all_states():
     new_dict = [val.to_dict() for val in all_state.values()]
     return jsonify(new_dict)
 
-@app_views.route("/states/<state_id>", methods=[""])
+@app_views.route("/states/<state_id>", methods=["GET"])
 def stateId(state_id):
     """Returns the state with an id"""
     obj = models.storage.get("State", state_id)
     if obj is not None:
-        return jsonify(obj.to_dict)
-        
+        return jsonify(obj.to_dict())
+    else:
+        abort(404)
