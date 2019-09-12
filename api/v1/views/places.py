@@ -86,3 +86,22 @@ def update_place(place_id):
             abort(400, "Not a JSON")
     else:
         abort(404)
+
+@app_views.route("/places_search",
+                 methods=["POST"], strict_slashes=False)
+def search_places():
+    """Searches for places"""
+    json = request.get_json()
+    if json is None:
+        abort(400, "Not a JSON")
+    all_places = models.storage.all("Place")
+    list_places = [val.to_dict() for val in all_places.values()]
+    if json == False:
+        return jsonify(list_places)
+    list_json = [len(val) for val in json.values()]
+    if not any(list_json) == True:
+        return jsonify(list_places)
+    if json.get("State") is not None:
+        if len(json.get("State")) != 0:
+            for json.get("State")
+            return jsonify()
