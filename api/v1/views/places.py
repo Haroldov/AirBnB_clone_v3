@@ -14,15 +14,6 @@ def all_pofc(city_id):
     new_dict = [val.to_dict() for val in obj.places]
     return jsonify(new_dict)
 
-
-@app_views.route("/places", methods=["GET"], strict_slashes=False)
-def all_places():
-    """Returns all the places"""
-    all_place = models.storage.all("Place")
-    new_dict = [val.to_dict() for val in all_place.values()]
-    return jsonify(new_dict)
-
-
 @app_views.route("/cities/<city_id>/places", methods=["POST"], strict_slashes=False)
 def create_place(city_id):
     """Creates place"""
@@ -30,7 +21,7 @@ def create_place(city_id):
     if obj_city is None:
         abort(404)
     json = request.get_json()
-    Place = models.place.State
+    Place = models.place.Place
     if json is not None:
         if json.get("user_id") is not None:
             obj_user = models.storage.get("User", user_id)
