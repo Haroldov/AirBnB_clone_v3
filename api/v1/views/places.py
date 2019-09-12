@@ -86,3 +86,44 @@ def update_place(place_id):
             abort(400, "Not a JSON")
     else:
         abort(404)
+
+@app_views.route("/places_search",
+                 methods=["POST"], strict_slashes=False)
+def search_places():
+    """Searches for places"""
+    json = request.get_json()
+    if json is None:
+        abort(400, "Not a JSON")
+    all_places = models.storage.all("Place")
+    list_places = [val.to_dict() for val in all_places.values()]
+    if json == False:
+        return jsonify(list_places)
+    list_json = [len(val) for val in json.values()]
+    if not any(list_json) == True:
+        return jsonify(list_places)
+    list_places = []
+    if json.get("states") is not None:
+        if len(json.get("states")) != 0:
+            for i in json.get("states"):
+                obj = models.storage.get("State", i)
+                if obj is not None:
+                    for city in obj.cities:
+                        for place in city.places:
+                            list_places.append(place.to_dict())
+    if json.get("cities") is not None:
+        if len(json.get("cities")) != 0:
+            for i in json.get("cities"):
+                obj = models.storage.get("City", i)
+                if obj is not None:
+                    for place in obj.places:
+                        list_places.append(place.to_dict())
+            return jsonify(list_places)
+    if json.get("amenities") is not None:
+        if len(json.get("amenites")) != 0:
+            list_places = []
+            for i in json.get("amenities"):
+                obj = models.storage.get("Amenity", i)
+                if obj is not None:
+                    for place in obj.place_amenities:
+                        list_places.append(place.to_dict())
+            return jsonify(list_places)
