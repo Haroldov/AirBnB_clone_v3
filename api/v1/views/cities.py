@@ -36,10 +36,10 @@ def citiesId(state_id):
     all_cities = obj.cities
     new_dict = [val.to_dict() for val in all_cities]
     return jsonify(new_dict)
-    
 
 
-@app_views.route("/cities/<city_id>", methods=["GET"], strict_slashes=False)
+@app_views.route("/cities/<city_id>",
+                 methods=["GET"], strict_slashes=False)
 def retrieve_city(city_id):
     """Returns a city object"""
     obj = models.storage.get("City", city_id)
