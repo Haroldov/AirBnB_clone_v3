@@ -39,7 +39,9 @@ def stateId(state_id):
     else:
         abort(404)
 
-@app_views.route("/states/<state_id>", methods=["DELETE"], strict_slashes=False)
+
+@app_views.route("/states/<state_id>", methods=["DELETE"],
+                 strict_slashes=False)
 def state_del(state_id):
     """ return empty dict with 200 status"""
     obj = models.storage.get("State", state_id)
@@ -49,6 +51,7 @@ def state_del(state_id):
         return jsonify({})
     else:
         abort(404)
+
 
 @app_views.route("/states/<state_id>", methods=["PUT"], strict_slashes=False)
 def update_state(state_id):
