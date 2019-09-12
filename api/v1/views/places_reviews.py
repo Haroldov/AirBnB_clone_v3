@@ -13,8 +13,7 @@ def places_reviews(place_id):
     obj = models.storage.get("Place", place_id)
     if obj is None:
         abort(404)
-    reviews = models.storage.all("Review")
-    new_dict = [val.to_dict() for val in reviews.values()]
+    new_dict = [val.to_dict() for val in obj.reviews]
     return jsonify(new_dict)
 
 
@@ -44,7 +43,7 @@ def review_del(review_id):
 
 @app_views.route("/places/<place_id>/reviews", methods=["POST"],
                  strict_slashes=False)
-def create_review():
+def create_review(place_id):
     """Creates review"""
     obj = models.storage.get("Place", place_id)
     if obj is None:
@@ -53,18 +52,19 @@ def create_review():
     Review = models.review.Review
     if json is not None:
         if json.get("text") is None:
-            abort(400, "Missing text")
-        user_id = json.get("user_id")
-        if user_id is not None:
-            obj = models.storage.get("User", user_id)
-            if obj is None:
-                abort(404)
+            user_id = json.get("user_id")
+            if user_id is not None:
+                obj = models.storage.get("User", user_id)
+                if obj is not None:
+                    obj = Review(name=json.get("name", place_id=place_id))
+                    obj.save()
+                    return jsonify(obj.to_dict()), 201
+                else:
+                    abort(404)
             else:
-                obj = Review(name=json.get("name", place_id=place_id))
-                obj.save()
-                return jsonify(obj.to_dict()), 201
+                abort(400, "Missing user_id")
         else:
-            abort(400, "Missing user_id")
+            abort(400, "Missing text")
     else:
         abort(400, "Not a JSON")
 
