@@ -51,20 +51,21 @@ def create_review(place_id):
     json = request.get_json()
     Review = models.review.Review
     if json is not None:
-        if json.get("text") is None:
-            user_id = json.get("user_id")
-            if user_id is not None:
+        user_id = json.get("user_id")
+        if user_id is not None:i
+            text = json.get("text")
+            if text is not None:
                 obj = models.storage.get("User", user_id)
                 if obj is not None:
-                    obj = Review(name=json.get("name", place_id=place_id))
+                    obj = Review(name=json.get("name"), place_id=place_id)
                     obj.save()
                     return jsonify(obj.to_dict()), 201
                 else:
                     abort(404)
             else:
-                abort(400, "Missing user_id")
+                abort(400, "Missing text")
         else:
-            abort(400, "Missing text")
+            abort(400, "Missing user_id")
     else:
         abort(400, "Not a JSON")
 
