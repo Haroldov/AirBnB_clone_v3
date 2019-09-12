@@ -31,12 +31,12 @@ def create_city(state_id):
 def citiesId(state_id):
     """Returns the city with an id"""
     obj = models.storage.get("State", state_id)
+    if obj is None:
+        abort(404)
     all_cities = obj.cities
     new_dict = [val.to_dict() for val in all_cities]
-    if obj is not None:
-        return jsonify(new_dict)
-    else:
-        abort(404)
+    return jsonify(new_dict)
+    
 
 
 @app_views.route("/cities/<city_id>", methods=["GET"], strict_slashes=False)
