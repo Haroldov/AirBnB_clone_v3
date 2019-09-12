@@ -14,6 +14,8 @@ def status():
 @app_views.route("/stats")
 def stats():
     """Returns the stats"""
-    classes = ["Amenity", "City", "User", "Place", "Review", "State"]
-    new_dict = map(lambda name: (name, models.storage.count(name)), classes)
+    classes = {"Amenity": "amenities", "City": "cities",
+               "User": "users", "Place": "places", "Review": "reviews",
+               "State": "states"}
+    new_dict = map(lambda tpl: (tpl[1], models.storage.count(tpl[0])), classes.items())
     return jsonify(dict(new_dict))
