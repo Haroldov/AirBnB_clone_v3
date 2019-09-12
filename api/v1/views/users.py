@@ -22,7 +22,8 @@ def create_user():
     if json is not None:
         if json.get("email") is not None:
             if json.get("password") is not None:
-                obj = User(name=json.get("name"))
+                obj = User(email=json.get("email"),
+                           password=json.get("password"))
                 obj.save()
                 return jsonify(obj.to_dict()), 201
             else:
