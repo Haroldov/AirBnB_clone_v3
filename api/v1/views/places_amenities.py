@@ -16,24 +16,24 @@ def places_amenities(place_id):
     if models.storage_t == 'db':
         new_dict = [val.to_dict() for val in obj.amenities]
     else:
-        new_dict = [val.to_dict() for val in obj.amenity_ids]
-    return jsonify(new_dict)
+        return jsonify(obj.amenity_ids)
 
 
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
                  methods=["DELETE"], strict_slashes=False)
 def amenities_del(place_id, amenity_id):
     """ return empty dict with 200 status"""
-    obj = models.storage.get("Place", place_id)
-    if obj is None:
+    obj_place = models.storage.get("Place", place_id)
+    if obj_place is None:
         abort(404)
-    obj = models.storage.get("Amenity", amenity_id)
-    if obj is not None:
+    obj_amenity = models.storage.get("Amenity", amenity_id)
+    if obj_amenity is None:
+        abort(404)
+    if models.storage_t == 'db':
+
         models.storage.delete(obj)
         models.storage.save()
         return jsonify({})
-    else:
-        abort(404)
 
 
 @app_views.route("/reviews/<review_id>",
