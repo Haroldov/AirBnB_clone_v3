@@ -15,13 +15,14 @@ def places_amenities(place_id):
         abort(404)
     if models.storage_t == 'db':
         new_dict = [val.to_dict() for val in obj.amenities]
+        return jsonify(new_dict)
     else:
         return jsonify(obj.amenity_ids)
 
 
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
                  methods=["DELETE"], strict_slashes=False)
-def amenities_del(place_id, amenity_id):
+def places_amenities_del(place_id, amenity_id):
     """ return empty dict with 200 status"""
     obj_place = models.storage.get("Place", place_id)
     if obj_place is None:
@@ -30,68 +31,38 @@ def amenities_del(place_id, amenity_id):
     if obj_amenity is None:
         abort(404)
     if models.storage_t == 'db':
-
-        models.storage.delete(obj)
-        models.storage.save()
-        return jsonify({})
-
-
-@app_views.route("/reviews/<review_id>",
-                 methods=["GET"], strict_slashes=False)
-def reviewId(review_id):
-    """Returns the review with an id"""
-    obj = models.storage.get("Review", review_id)
-    if obj is not None:
-        return jsonify(obj.to_dict())
-    else:
-        abort(404)
-
-
-@app_views.route("/places/<place_id>/reviews", methods=["POST"],
-                 strict_slashes=False)
-def create_review(place_id):
-    """Creates review"""
-    obj = models.storage.get("Place", place_id)
-    if obj is None:
-        abort(404)
-    json = request.get_json()
-    Review = models.review.Review
-    if json is not None:
-        user_id = json.get("user_id")
-        if user_id is not None:
-            text = json.get("text")
-            if text is not None:
-                obj = models.storage.get("User", user_id)
-                if obj is not None:
-                    obj = Review(place_id=place_id, user_id=user_id,
-                                 text=text)
-                    obj.save()
-                    return jsonify(obj.to_dict()), 201
-                else:
-                    abort(404)
-            else:
-                abort(400, "Missing text")
+        if obj_amenity not in obj_place.amenities:
+            abort(404)
         else:
-            abort(400, "Missing user_id")
+            obj_place.amenities.remove(obj_amenity)
     else:
-        abort(400, "Not a JSON")
-
-
-@app_views.route("/reviews/<review_id>",
-                 methods=["PUT"], strict_slashes=False)
-def update_review(review_id):
-    """Returns the review with an id"""
-    obj = models.storage.get("Review", review_id)
-    json = request.get_json()
-    if obj is not None:
-        if json is not None:
-            for key, value in json.items():
-                if key not in ["id", "updated_at", "created_at",
-                               "user_id", "place_id"]:
-                    setattr(obj, key, value)
-            obj.save()
-            return jsonify(obj.to_dict())
+        if obj_amenity not in obj_place.amenity_ids:
+            abort(404)
         else:
-            abort(400, "Not a JSON")
-    else:
+            obj_place.amenity_ids.remove(obj_amenity)
+    models.storage.save()
+    return jsonify({})
+
+
+@app_views.route("/places/<place_id>/amenities/<amenity_id>",
+                 methods=["POST"], strict_slashes=False)
+def create_place_amenities(place_id, amenity_id):
+    """Creates amenity for a place"""
+    obj_place = models.storage.get("Place", place_id)
+    if obj_place is None:
         abort(404)
+    obj_amenity = models.storage.get("Amenity", amenity_id)
+    if obj_amenity is None:
+        abort(404)
+    if models.storage_t == 'db':
+        if obj_amenity not in obj_place.amenities:
+            abort(404)
+        else:
+            obj_place.amenities.append(obj_amenity)
+    else:
+        if obj_amenity not in obj_place.amenity_ids:
+            abort(404)
+        else:
+            obj_place.amenity_ids.append(obj_amenity)
+    obj_place.save()
+    return jsonify(obj_amenity.to_dict()), 201
