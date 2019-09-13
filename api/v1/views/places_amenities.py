@@ -55,7 +55,7 @@ def create_place_amenities(place_id, amenity_id):
     if obj_amenity is None:
         abort(404)
     if obj_amenity in obj_place:
-        return jsonify (obj_amenity.to_dict())
+        return jsonify(obj_amenity.to_dict())
     if models.storage_t == 'db':
         if obj_amenity not in obj_place.amenities:
             abort(404)
