@@ -17,7 +17,8 @@ def places_amenities(place_id):
         new_dict = [val.to_dict() for val in obj.amenities]
         return jsonify(new_dict)
     else:
-        return jsonify(obj.amenity_ids)
+        new_dict = [val.to_dict() for val in obj.amenity_ids]
+        return jsonify(new_dict)
 
 
 @app_views.route("/places/<place_id>/amenities/<amenity_id>",
