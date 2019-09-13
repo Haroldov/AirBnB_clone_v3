@@ -1,0 +1,5 @@
+Code Review for AirBnB_clone_v3:
+Juan David Amaya (GaviriaAmaya)
+
+I see that you used the tools of Issues and Projects from Github and that very cool because they are useful. You say you need to update DBStorage and FileStorage adding the methos of 'get' to retrieve an object and the method of 'count' to count the number of objects. I recommend you to remember the components of the objects we work with in the project, they are a list of dictionary with dictionary so you have to be aware of using the value or the key to compose them.
+
